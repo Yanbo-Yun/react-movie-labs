@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "react-query";
 import { getUpcomingMovies } from "../api/tmdb-api";
 import Spinner from '../components/spinner';
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { MoviesContext } from "../contexts/moviesContext";
 
 const UpcomingMoviesPage = () => {
   const { data, error, isLoading, isError } = useQuery("upcomingMovies", getUpcomingMovies);
+  const { addToWatchlist } = useContext(MoviesContext);
 
   if (isLoading) {
     return <Spinner />;
@@ -24,9 +26,10 @@ const UpcomingMoviesPage = () => {
       movies={movies}
       action={(movie) => {
         return (
-          <>
-            <PlaylistAddIcon />
-          </>
+          <PlaylistAddIcon
+            onClick={() => addToWatchlist(movie)} // 添加点击事件处理程序
+            sx={{ cursor: "pointer", fontSize: 30, color: "blue" }}
+          />
         );
       }}
     />
